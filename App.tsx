@@ -15,6 +15,10 @@ import {
   Text,
   useColorScheme,
   View,
+  NativeModules,
+  Button,
+  Pressable,
+  Alert,
 } from 'react-native';
 
 import {
@@ -57,6 +61,23 @@ function Section({children, title}: SectionProps): React.JSX.Element {
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
+  const nativeActi = NativeModules.openAct;
+
+  function callNativeAct() {
+    Alert.alert('Alert Title', 'My Alert Msg', [
+      {
+        text: 'Ask me later',
+        onPress: () => console.log('Ask me later pressed'),
+      },
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {text: 'OK', onPress: () => console.log('OK Pressed')},
+    ]);
+    nativeActi.openScreen();
+  }
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
@@ -76,20 +97,22 @@ function App(): React.JSX.Element {
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
+          <Pressable
+            onPress={() => {
+              callNativeAct();
+            }}>
+            <View
+              style={{
+                backgroundColor: 'blue',
+                justifyContent: 'center',
+                alignSelf: 'center',
+                marginTop: 50,
+                width: 100,
+                height: 50,
+              }}>
+              <Text style={{color: 'white'}}>Open Activity</Text>
+            </View>
+          </Pressable>
         </View>
       </ScrollView>
     </SafeAreaView>
